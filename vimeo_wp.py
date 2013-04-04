@@ -27,40 +27,40 @@ Script that takes comments from a vimeo video with a #highlight tag and converts
 logger = logging.getLogger(script_name)
 
 def convert_comments_to_posts(video_id, parent_post_id):
-	token = oauth.Token(key=cr.token_key, secret=cr.token_secret)
-	consumer = oauth.Consumer(key=cr.consumer_key, secret=cr.consumer_secret)
-	url = "http://vimeo.com/api/rest/v2?format=json&method=vimeo.videos.comments.getList&video_id=" + str(video_id) 
-	client = oauth.Client(consumer, token)
-	resp, content = client.request(url)
-	data = json.loads(content)
-	process_comments(video_id, parent_post_id, data['comments']['comment'])
+    token = oauth.Token(key=cr.token_key, secret=cr.token_secret)
+    consumer = oauth.Consumer(key=cr.consumer_key, secret=cr.consumer_secret)
+    url = "http://vimeo.com/api/rest/v2?format=json&method=vimeo.videos.comments.getList&video_id=" + str(video_id)
+    client = oauth.Client(consumer, token)
+    resp, content = client.request(url)
+    data = json.loads(content)
+    process_comments(video_id, parent_post_id, data['comments']['comment'])
 
 def process_comments(video_id, parent_post_id, comments):
-	wp = Client(cr.wp_url, cr.wp_user, cr.wp_password)
-	for comment in comments:
-		if '#highlight' in comment['text']:
-			process_comment(wp, video_id, parent_post_id, comment)
+    wp = Client(cr.wp_url, cr.wp_user, cr.wp_password)
+    for comment in comments:
+        if '#highlight' in comment['text']:
+            process_comment(wp, video_id, parent_post_id, comment)
 
 def get_post_content(video_id, comment):
-	text = comment['text'].replace('#highlight','')
-	return '<p>' + text + '</p><iframe src="' + video_url(video_id, text) + '" width="625" height="368" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe><p><a href="' + comment['permalink'] + '">View comment on Vimeo</a> '
+    text = comment['text'].replace('#highlight','')
+    return '<p>' + text + '</p><iframe src="' + video_url(video_id, text) + '" width="625" height="368" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe><p><a href="' + comment['permalink'] + '">View comment on Vimeo</a> '
 
 def process_comment(wp, video_id, parent_post_id, comment):
-	post = WordPressPost()
-	post.title = comment['text'][6:50]
-	post.content = get_post_content(video_id,comment)
-	post.post_type = 'video-highlight'
-	post.post_status = 'publish'
-	post.parent_id = parent_post_id
-	print "Created post with ID [" + wp.call(NewPost(post)) + "]"
+    post = WordPressPost()
+    post.title = comment['text'][6:50]
+    post.content = get_post_content(video_id,comment)
+    post.post_type = 'video-highlight'
+    post.post_status = 'publish'
+    post.parent_id = parent_post_id
+    print "Created post with ID [" + wp.call(NewPost(post)) + "]"
 
 def video_url(video_id, comment_text):
-	url =  'http://player.vimeo.com/video/' + str(video_id) + '#t=' + strip_time(comment_text)   
-	logger.debug("Video URL: %s", url)
-	return url
-	
+    url =  'http://player.vimeo.com/video/' + str(video_id) + '#t=' + strip_time(comment_text)
+    logger.debug("Video URL: %s", url)
+    return url
+
 def strip_time(text):
-	return text[0:2] + 'm' + text[3:5] + 's'
+    return text[0:2] + 'm' + text[3:5] + 's'
 
 def get_options(argv):
     '''Get options and arguments from argv string.'''
@@ -68,9 +68,9 @@ def get_options(argv):
     parser.description=description
     parser.add_option("-v", "--verbosity", action="count", default=0,
         help="Specify up to three times to increase verbosity, i.e. -v to see warnings, -vv for information messages, or -vvv for debug messages.")
-
+    
     # Extra script options here...
-
+    
     options, args = parser.parse_args(list(argv))
     script, args = args[0], args[1:]
     return options, script, args, parser.format_help()
@@ -88,7 +88,7 @@ def wrap_stream_for_tty(stream):
     if stream.isatty():
         # Configure locale from the user's environment settings.
         locale.setlocale(locale.LC_ALL, '')
-
+        
         # Wrap stdout with an encoding-aware writer.
         lang, encoding = locale.getdefaultlocale()
         logger.debug('Streaming to tty with lang, encoding = %s, %s', lang, encoding)
@@ -96,16 +96,16 @@ def wrap_stream_for_tty(stream):
             return codecs.getwriter(encoding)(stream)
         else:
             logger.warn('No tty encoding found!')
-
+    
     return stream
 
-def main(*argv):    
+def main(*argv):
     options, script, args, help = get_options(argv)
     init_logger(options.verbosity)
     
     convert_comments_to_posts(*args)
 
 if __name__ == '__main__':
-	sys.exit(main(*sys.argv))
+    sys.exit(main(*sys.argv))
 
 
