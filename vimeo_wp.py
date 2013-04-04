@@ -52,10 +52,10 @@ def process_comment(wp, video_id, parent_post_id, comment):
     post.post_type = 'video-highlight'
     post.post_status = 'publish'
     post.parent_id = parent_post_id
-    print "Created post with ID [" + wp.call(NewPost(post)) + "]"
+    logger.info("Created post with ID [%s]", wp.call(NewPost(post))
 
 def video_url(video_id, comment_text):
-    url =  'http://player.vimeo.com/video/' + str(video_id) + '#t=' + strip_time(comment_text)
+    url = 'http://player.vimeo.com/video/%s#t=%s' % (video_id, strip_time(comment_text))
     logger.debug("Video URL: %s", url)
     return url
 
