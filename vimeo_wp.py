@@ -103,7 +103,7 @@ def main(*argv):
     options, script, args, help = get_options(argv)
     init_logger(options.verbosity)
     
-	convert_comments_to_posts(*args)
+    convert_comments_to_posts(*args)
 
 if __name__ == '__main__':
 	sys.exit(main(*sys.argv))
