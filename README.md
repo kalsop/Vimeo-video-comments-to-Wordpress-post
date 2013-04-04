@@ -1,24 +1,27 @@
-Readme
+Vimeo Video Comments To Wordpress Post
+======================================
 
 This Python script takes comments (containing the text '#highlight') from publicly available Vimeo videos and converts them to Wordpress posts with the Vimeo video embedded. 
 
 A separate file called 'credentials.py' will need to be created in the script directory in the following format:
 
-'''python
-wp_user="<Wordpress username>"
-wp_password="<Wordpress password>"
-wp_url="<Wordpress URL>/xmlrpc.php"
-token_key = '<Vimeo API token key>'
-token_secret = '<Vimeo API token secret>'
-consumer_key = '<Vimeo API consumer key>'
-consumer_secret = '<Vimeo API consumer secret>'
-'''
-
-Usage: '''python vimeo_wp.py <video_id> <parent_post_id>'''
+```python
+wp_user = [Wordpress username]
+wp_password = [Wordpress password]
+wp_url = [Wordpress URL>/xmlrpc.php]
+token_key = [Vimeo API token key]
+token_secret = [Vimeo API token secret]
+consumer_key = [Vimeo API consumer key]
+consumer_secret = [Vimeo API consumer secret]
+```
 
 
-Katherine Alsop / github.com/kalsop
-John Cowie / github.com/johncowie
+
+Usage: ```python vimeo_wp.py <video_id> <parent_post_id>```
+
+[Katherine Alsop](http://github.com/kalsop) / [John Cowie](http://github.com/johncowie)
+
+
 
 Copyright (C) 2013 Government Digital Service
 
