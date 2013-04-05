@@ -18,6 +18,9 @@ import os
 import sys
 import warnings
 
+__author__ = '$USER'
+__version__="0.1"
+
 script_name = os.path.basename(sys.argv[0])
 usage = '[options] <video_id> <parent_post_id>'
 description = '''
@@ -52,7 +55,8 @@ def process_comment(wp, video_id, parent_post_id, comment):
     post.post_type = 'video-highlight'
     post.post_status = 'publish'
     post.parent_id = parent_post_id
-    logger.info("Created post with ID [%s]", wp.call(NewPost(post))
+    #logger.info("Created post with ID [%s]", wp.call(NewPost(post)))
+    print "Created post with ID [%s]" % wp.call(NewPost(post))
 
 def video_url(video_id, comment_text):
     url = 'http://player.vimeo.com/video/%s#t=%s' % (video_id, strip_time(comment_text))
@@ -102,8 +106,7 @@ def wrap_stream_for_tty(stream):
 def main(*argv):
     options, script, args, help = get_options(argv)
     init_logger(options.verbosity)
-    
-    convert_comments_to_posts(*args)
+    convert_comments_to_posts(args[0], args[1])
 
 if __name__ == '__main__':
     sys.exit(main(*sys.argv))
